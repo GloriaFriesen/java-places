@@ -1,11 +1,21 @@
 <!--index.vtl-->
 <h1>Places I've Been</h1>
-
+#if ($places)
+  <ul>
+    #foreach ($place in $places)
+      <li>$place.getPlaceName()</li>
+    #end
+  </ul>
+#else
+<p>
+  No Places!
+</p>
+#end
 <p>
   Add New Place
 </p>
 
-<form action="/placeList" method="post">
+<form action="/placeList" method="get">
   <label for="placeName">Name of Place:</label>
   <input type="text" id="placeName" name="placeName">
 
