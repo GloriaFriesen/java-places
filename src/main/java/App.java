@@ -5,7 +5,6 @@ import spark.template.velocity.VelocityTemplateEngine;
 import static spark.Spark.*;
 import java.util.ArrayList;
 
-
 public class App {
   public static void main(String[] args) {
     staticFileLocation("/public");
@@ -14,12 +13,9 @@ public class App {
 
   get("/", (request, response) -> {
     Map<String, Object> model = new HashMap<String, Object>();
-
-    request.session().attribute("placesArrayKey", placesArray);
     model.put("template", "templates/index.vtl");
     return new ModelAndView(model, layout);
   }, new VelocityTemplateEngine());
-
 
   get("/placeList", (request, response) -> {
     Map<String, Object> model = new HashMap<String, Object>();
@@ -28,12 +24,10 @@ public class App {
     Place newPlace = new Place(placeName);
     placesArray.add(newPlace);
 
-    model.put("place", request.session().attribute("place"));
     model.put("printPlaces", request.session().attribute("placesArrayKey"));
     model.put("template", "templates/placeList.vtl");
     return new ModelAndView(model, layout);
   }, new VelocityTemplateEngine());
-
 
   }
 }
