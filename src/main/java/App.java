@@ -10,44 +10,26 @@ public class App {
   public static void main(String[] args) {
     staticFileLocation("/public");
     String layout = "templates/layout.vtl";
+    ArrayList<Place> placesArray = new ArrayList<Place>();
 
   get("/", (request, response) -> {
     Map<String, Object> model = new HashMap<String, Object>();
-    ArrayList<Place> places = new ArrayList<Place>();
-    request.session().attribute("places", places);
+
+    request.session().attribute("placesArrayKey", placesArray);
     model.put("template", "templates/index.vtl");
     return new ModelAndView(model, layout);
   }, new VelocityTemplateEngine());
 
-  post("/placeList", (request, response) -> {
-    Map<String, Object> model = new HashMap<String, Object>();
-    ArrayList<Place> places = new ArrayList<Place>();
-    request.session().attribute("places", places);
-
-    String placeName = request.queryParams("placeName");
-    Place newPlace = new Place(placeName);
-    places.add(newPlace);
-    request.session().attribute("place", newPlace);
-    model.put("template", "templates/placeList.vtl");
-    return new ModelAndView(model, layout);
-  }, new VelocityTemplateEngine());
 
   get("/placeList", (request, response) -> {
     Map<String, Object> model = new HashMap<String, Object>();
-
-    // ArrayList<Place> places = request.session().attribute("places");
-    // if (places == null) {
-    //   places = new ArrayList<Place>();
-    //   request.session().attribute("places", places);
-    // }
-    // request.session().attribute("place");
-    ArrayList<Place> places = request.session().attribute("places");
+    request.session().attribute("placesArrayKey", placesArray);
     String placeName = request.queryParams("placeName");
     Place newPlace = new Place(placeName);
-    places.add(newPlace);
+    placesArray.add(newPlace);
 
     model.put("place", request.session().attribute("place"));
-    model.put("places", request.session().attribute("places"));
+    model.put("printPlaces", request.session().attribute("placesArrayKey"));
     model.put("template", "templates/placeList.vtl");
     return new ModelAndView(model, layout);
   }, new VelocityTemplateEngine());
